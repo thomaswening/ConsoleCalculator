@@ -10,16 +10,13 @@ namespace ConsoleCalculator
     {
         private string kind;
         public string Content { get; set; }
+        public string Kind { get; set; }
+
         public int Length => Content.Length;
-        public string Kind
-        {
-            get => kind;
-            private set => kind = SymbolKind.FindSymbolKind(Content);
-        }
         public Symbol(string pInput)
         {
             Content = pInput;
-            Kind = Content;
+            Kind = SymbolKind.FindSymbolKind(Content);
         }
     }
 }

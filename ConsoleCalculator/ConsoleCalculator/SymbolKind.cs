@@ -10,25 +10,32 @@ namespace ConsoleCalculator
     {
         public const string NUMBER = "number";
         public const string OPERATOR = "operator";
-        public const string PARENTHESIS_LEFT = "parenthesis left";
-        public const string PARENTHESIS_RIGHT = "parenthesis right";
+        public const string BRACKET_LEFT = "bracket left";
+        public const string BRACKET_RIGHT = "bracket right";
 
         public const char SPACE = ' ';
         public const char DOT = '.';
 
+        public const char ADD = '+';
+        public const char SUBTRACT = '-';
+        public const char MULTIPLY = '*';
+        public const char DIVIDE = '/';
+
         public const string INDETERMINATE = "indeterminate";
 
         static public List<string> Operators => new() { "+", "-", "*", "/" };
-        static public List<string> LeftParentheses => new() { "(", "[", "{" };
-        static public List<string> RightParentheses => new() { ")", "]", "}" };
+        static public List<char> PrecedentOperators => new() { '*', '/' };
 
-        static public List<string> Parentheses
+        static public List<string> LeftBrackets => new() { "(", "[", "{" };
+        static public List<string> RightBrackets => new() { ")", "]", "}" };
+
+        static public List<string> Brackets
         {
             get
             {
                 List<string> parentheses = new();
-                parentheses.AddRange(LeftParentheses);
-                parentheses.AddRange(RightParentheses);
+                parentheses.AddRange(LeftBrackets);
+                parentheses.AddRange(RightBrackets);
                 return parentheses;
             }
         }
@@ -37,8 +44,8 @@ namespace ConsoleCalculator
         {
             if (Char.IsDigit((char)pInput[0]) || pInput[0].Equals('.')) return NUMBER;
             else if (Operators.Contains(pInput)) return OPERATOR;
-            else if (LeftParentheses.Contains(pInput)) return PARENTHESIS_LEFT;
-            else if (RightParentheses.Contains(pInput)) return PARENTHESIS_RIGHT;
+            else if (LeftBrackets.Contains(pInput)) return BRACKET_LEFT;
+            else if (RightBrackets.Contains(pInput)) return BRACKET_RIGHT;
             else return INDETERMINATE;
         }
 

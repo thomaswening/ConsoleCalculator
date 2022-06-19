@@ -6,13 +6,10 @@ namespace ConsoleCalculator
     {
         static void Main()
         {
-            string input = "1000.";
+            string input = "(100 - (2 * 50) + 10)/5";
             Expression expression = new(input);
 
-            foreach (Symbol symbol in expression.Symbols)
-            {
-                Console.WriteLine($"\"{symbol.Content}\"\t{symbol.Kind}");
-            }
+            Console.Write(expression.Evaluate());
         }
     }
 }
