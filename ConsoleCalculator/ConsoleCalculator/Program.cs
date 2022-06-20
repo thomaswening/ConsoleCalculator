@@ -6,10 +6,18 @@ namespace ConsoleCalculator
     {
         static void Main()
         {
-            string input = "(100 - (2 * 50) + 10)/5";
+            Console.Write("Please, enter a mathematical expression to evaluate.\n>> ");
+            string input = Console.ReadLine();
             Expression expression = new(input);
 
-            Console.Write(expression.Evaluate());
+            try
+            {
+                Console.Write(expression.Evaluate());
+            }
+            catch (DivideByZeroException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

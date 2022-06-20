@@ -177,7 +177,8 @@ namespace ConsoleCalculator
                     return num1 * num2;
 
                 case SymbolKind.DIVIDE:
-                    return num1 / num2;
+                    if (num2 == 0) throw new DivideByZeroException();
+                    else return num1 / num2;
 
                 default: throw new NotImplementedException();
             }
@@ -197,6 +198,28 @@ namespace ConsoleCalculator
             }
 
             return 1;
+        }
+
+        private bool CheckBrackets()
+        {
+            int openBrackets = 0;
+            //int iLastUnpairedBracket = -1;
+
+            foreach (Symbol symbol in Symbols)
+            {
+                if (symbol.Kind.Equals(SymbolKind.BRACKET_LEFT)) openBrackets++;
+                if (symbol.Kind.Equals(SymbolKind.BRACKET_RIGHT)) openBrackets--;
+            }
+
+            switch (openBrackets)
+            {
+                case 0:
+                    return true;
+
+                default:
+                    Console.WriteLine("\nThere are unpaired brackets in your expression. Please revise.");
+                    return false;
+            }
         }
     }
 }
