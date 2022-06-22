@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace ConsoleCalculator
 {
+    /// <summary>
+    /// Represents a single symbol in a mathematical expression.
+    /// </summary>
     internal class Symbol
     {
-        private string kind;
         public string Content { get; set; }
         public string Kind { get; set; }
 

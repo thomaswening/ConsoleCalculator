@@ -6,12 +6,19 @@ using System.Threading.Tasks;
 
 namespace ConsoleCalculator
 {
+    /// <summary>
+    /// Defines the different kinds of symbols there are.
+    /// Defines constants containing the string literals for symbols other than numbers.
+    /// Groups symbols together in collections.
+    /// </summary>
     internal struct SymbolKind
     {
+
         public const string NUMBER = "number";
         public const string OPERATOR = "operator";
         public const string BRACKET_LEFT = "bracket left";
         public const string BRACKET_RIGHT = "bracket right";
+        public const string INDETERMINATE = "indeterminate";
 
         public const char SPACE = ' ';
         public const char DOT = '.';
@@ -21,14 +28,10 @@ namespace ConsoleCalculator
         public const char MULTIPLY = '*';
         public const char DIVIDE = '/';
 
-        public const string INDETERMINATE = "indeterminate";
-
         static public List<string> Operators => new() { "+", "-", "*", "/" };
         static public List<char> PrecedentOperators => new() { '*', '/' };
-
         static public List<string> LeftBrackets => new() { "(", "[", "{" };
         static public List<string> RightBrackets => new() { ")", "]", "}" };
-
         static public List<string> Brackets
         {
             get
@@ -47,28 +50,6 @@ namespace ConsoleCalculator
             else if (LeftBrackets.Contains(pInput)) return BRACKET_LEFT;
             else if (RightBrackets.Contains(pInput)) return BRACKET_RIGHT;
             else return INDETERMINATE;
-        }
-
-        static public string FindSymbolKind(char pInput) => FindSymbolKind(Convert.ToString(pInput));
-
-        static public bool IsOfSameKind(string pInput1, string pInput2)
-        {
-            return FindSymbolKind(pInput1).Equals(FindSymbolKind(pInput2));
-        }
-
-        static public bool IsOfSameKind(char pInput1, string pInput2)
-        {
-            return FindSymbolKind(pInput1).Equals(FindSymbolKind(pInput2));
-        }
-
-        static public bool IsOfSameKind(string pInput1, char pInput2)
-        {
-            return FindSymbolKind(pInput1).Equals(FindSymbolKind(pInput2));
-        }
-
-        static public bool IsOfSameKind(char pInput1, char pInput2)
-        {
-            return FindSymbolKind(pInput1).Equals(FindSymbolKind(pInput2));
         }
     }
 }

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ConsoleCalculator
 {
+    /// <summary>
+    /// Defines a mathematical expression that may be evaluated.
+    /// </summary>
     internal class Expression
     {
         public List<Symbol> Symbols = new();
@@ -28,9 +31,11 @@ namespace ConsoleCalculator
 
             return sb.ToString();
         }
+
         public void Clear() => Symbols.Clear();
         public void AddSymbol(Symbol pSymbol) => Symbols.Add(pSymbol);
         public void AddSymbols(List<Symbol> pSymbols) => Symbols.AddRange(pSymbols);
+        
         public List<Symbol> ConvertToSymbolList(string pInput)
         {
             StringBuilder stringBuilder = new();
@@ -69,12 +74,20 @@ namespace ConsoleCalculator
 
             return symbols;
         }
+
+        /// <summary>
+        /// Checks if two chars can be part of a number in that order.
+        /// </summary>
+        /// <param name="pElement1">Predecessor char to be checked.</param>
+        /// <param name="pElement2">Successor char to be checked.</param>
+        /// <returns>True if the chars can be part of a number in that order, false otherwise.</returns>
         private bool CanMakeUpNumber(char pElement1, char pElement2)
         {
             return (Char.IsDigit(pElement1) && Char.IsDigit(pElement2))
                 || (Char.IsDigit(pElement1) && pElement2.Equals('.'))
                 || (pElement1.Equals(SymbolKind.DOT) && Char.IsDigit(pElement2));
         }
+        
         private void RemoveOuterBrackets()
         {
             Symbols.RemoveAt(0);
@@ -88,6 +101,13 @@ namespace ConsoleCalculator
 
             return copy;
         }
+        
+        /// <summary>
+        /// Iterates through the expression's symbols and checks how many 
+        /// brackets are opened and then closed in order to determine
+        /// how many subexpressions are enclosed in brackets within the expression.
+        /// </summary>
+        /// <returns>A list of all subexpressions within the expression.</returns>
         public List<Expression> GetSubExpressions()
         {
             int openBrackets = 0;
@@ -121,12 +141,19 @@ namespace ConsoleCalculator
             return subExpressions;
         }
 
+        /// <summary>
+        /// Evaluates the expression's subexpressions first, then replaces them with their
+        /// value and then evaluates the remaining primitive expression.
+        /// </summary>
+        /// <returns>The expression's value.</returns>
         public double Evaluate()
         {
             List<Expression> subExpressions = GetSubExpressions();
 
             if (subExpressions.Count > 0)
             {
+                // The subexpressions must be replaced by their values from right to left
+                // in order to maintain the starting indices of the remaining subexpressions
                 subExpressions.Reverse();
                 foreach (Expression subExpression in subExpressions)
                 {
@@ -139,6 +166,13 @@ namespace ConsoleCalculator
             return EvaluatePrimitiveExpression(this);
         }
 
+        /// <summary>
+        /// Evaluates an expression without subexpressions iteratively. First determines the 
+        /// indices of the leftmost precedent operator and then evaluates its binary expression.
+        /// When there are none left, it evaluates the remaining expression from left to right.
+        /// </summary>
+        /// <param name="pExpression">Primitive expression to be evaluated.</param>
+        /// <returns>The primitive expression's value.</returns>
         public double EvaluatePrimitiveExpression(Expression pExpression)
         {
             int iFirstPrecedentOperator;
@@ -200,10 +234,13 @@ namespace ConsoleCalculator
             return 1;
         }
 
+        /// <summary>
+        /// Checks for unpaired brackets and prints a message if there are any.
+        /// </summary>
+        /// <returns>True if there are no unpaired brackets, false otherwise.</returns>
         private bool CheckBrackets()
         {
             int openBrackets = 0;
-            //int iLastUnpairedBracket = -1;
 
             foreach (Symbol symbol in Symbols)
             {
