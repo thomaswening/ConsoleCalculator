@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace ConsoleCalculator
 {
@@ -18,8 +14,7 @@ namespace ConsoleCalculator
         public Expression() { }
         public Expression(string pInput)
         {
-            Symbols = ConvertToSymbolList(pInput);
-            CheckBrackets();
+            Symbols = Symbol.ConvertToSymbols(pInput);
         }
 
         public override string ToString()
@@ -36,58 +31,7 @@ namespace ConsoleCalculator
         public void Clear() => Symbols.Clear();
         public void AddSymbol(Symbol pSymbol) => Symbols.Add(pSymbol);
         public void AddSymbols(List<Symbol> pSymbols) => Symbols.AddRange(pSymbols);
-        private List<Symbol> ConvertToSymbolList(string pInput)
-        {
-            StringBuilder stringBuilder = new();
-            List<Symbol> symbols = new();
 
-            char currentElement;
-            char nextElement;
-            for (int i = 1; i < pInput.Length; i++)
-            {
-                currentElement = pInput[i - 1];
-                nextElement = pInput[i];
-
-                if (!currentElement.Equals(SymbolKind.SPACE))
-                {
-                    stringBuilder.Append(currentElement);
-
-                    if (!CanMakeUpNumber(currentElement, nextElement))
-                    {
-                        symbols.Add(new Symbol(stringBuilder.ToString()));
-                        stringBuilder.Clear();
-                    }
-                }
-
-                if (i == pInput.Length - 1)
-                {
-                    if ((CanMakeUpNumber(currentElement, nextElement) && !nextElement.Equals(SymbolKind.DOT))
-                        || Char.IsDigit(nextElement)
-                        || SymbolKind.Brackets.Contains(Convert.ToString(nextElement)))
-                    {
-                        stringBuilder.Append(nextElement);
-                        symbols.Add(new Symbol(stringBuilder.ToString()));
-                        stringBuilder.Clear();
-                    }
-                }
-            }
-
-            return symbols;
-        }
-
-        /// <summary>
-        /// Checks if two chars can be part of a number in that order.
-        /// </summary>
-        /// <param name="pElement1">Predecessor char to be checked.</param>
-        /// <param name="pElement2">Successor char to be checked.</param>
-        /// <returns>True if the chars can be part of a number in that order, false otherwise.</returns>
-        private bool CanMakeUpNumber(char pElement1, char pElement2)
-        {
-            return (Char.IsDigit(pElement1) && Char.IsDigit(pElement2))
-                || (Char.IsDigit(pElement1) && pElement2.Equals('.'))
-                || (pElement1.Equals(SymbolKind.DOT) && Char.IsDigit(pElement2));
-        }
-        
         private void RemoveOuterBrackets()
         {
             Symbols.RemoveAt(0);
@@ -101,7 +45,7 @@ namespace ConsoleCalculator
 
             return copy;
         }
-        
+
         /// <summary>
         /// Iterates through the expression's symbols and checks how many 
         /// brackets are opened and then closed in order to determine
@@ -118,7 +62,7 @@ namespace ConsoleCalculator
 
             foreach (Symbol symbol in Symbols)
             {
-                if (symbol.Kind == SymbolKind.BRACKET_LEFT)
+                if (symbol.Content == SymbolConst.BRACKET_LEFT.ToString())
                 {
                     if (openBrackets == 0) subExpression.StartIndex = i;
                     openBrackets++;
@@ -126,7 +70,7 @@ namespace ConsoleCalculator
 
                 if (openBrackets > 0) subExpression.AddSymbol(symbol);
 
-                if (symbol.Kind == SymbolKind.BRACKET_RIGHT) openBrackets--;
+                if (symbol.Content == SymbolConst.BRACKET_RIGHT.ToString()) openBrackets--;
 
                 if (openBrackets == 0 && subExpression.Length > 0)
                 {
@@ -136,34 +80,9 @@ namespace ConsoleCalculator
                 }
 
                 i++;
-            } 
-            
+            }
+
             return subExpressions;
-        }
-
-        /// <summary>
-        /// Checks for unpaired brackets and prints a message if there are any.
-        /// </summary>
-        /// <returns>True if there are no unpaired brackets, false otherwise.</returns>
-        private bool CheckBrackets()
-        {
-            int openBrackets = 0;
-
-            foreach (Symbol symbol in Symbols)
-            {
-                if (symbol.Kind.Equals(SymbolKind.BRACKET_LEFT)) openBrackets++;
-                if (symbol.Kind.Equals(SymbolKind.BRACKET_RIGHT)) openBrackets--;
-            }
-
-            switch (openBrackets)
-            {
-                case 0:
-                    return true;
-
-                default:
-                    Console.WriteLine("\nThere are unpaired brackets in your expression. Please revise.");
-                    return false;
-            }
         }
     }
 }

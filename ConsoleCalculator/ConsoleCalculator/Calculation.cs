@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConsoleCalculator
+﻿namespace ConsoleCalculator
 {
     /// <summary>
     /// Represents a calculation that may be evaluated.
@@ -69,37 +63,37 @@ namespace ConsoleCalculator
 
             return Convert.ToDouble(pExpression.Symbols[0].Content);
         }
-        private double EvaluateBinaryExpression(Symbol pNum1, Symbol pNum2, Symbol pOperator)
+        private static double EvaluateBinaryExpression(Symbol pNum1, Symbol pNum2, Symbol pOperator)
         {
             double num1 = Convert.ToDouble(pNum1.Content);
             double num2 = Convert.ToDouble(pNum2.Content);
 
             switch (Convert.ToChar(pOperator.Content))
             {
-                case SymbolKind.ADD:
+                case SymbolConst.PLUS:
                     return num1 + num2;
 
-                case SymbolKind.SUBTRACT:
+                case SymbolConst.MINUS:
                     return num1 - num2;
 
-                case SymbolKind.MULTIPLY:
+                case SymbolConst.MULTIPLY:
                     return num1 * num2;
 
-                case SymbolKind.DIVIDE:
+                case SymbolConst.DIVIDE:
                     if (num2 == 0) throw new DivideByZeroException();
                     else return num1 / num2;
 
                 default: throw new NotImplementedException();
             }
         }
-        private int GetFirstPrecedentOperator(List<Symbol> pSymbols)
+        private static int GetFirstPrecedentOperator(List<Symbol> pSymbols)
         {
             int i = 0;
             foreach (Symbol symbol in pSymbols)
             {
                 if (!symbol.Kind.Equals(SymbolKind.NUMBER))
                 {
-                    if (SymbolKind.PrecedentOperators.Contains(Convert.ToChar(symbol.Content))) return i;
+                    if (SymbolConst.PrecedentOperators.Contains(Convert.ToChar(symbol.Content))) return i;
                 }
 
                 i++;
